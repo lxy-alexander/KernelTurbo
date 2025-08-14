@@ -1,2 +1,2 @@
 # KernelTurbo
-Cuda Generator
+Auto CUDA Generator
