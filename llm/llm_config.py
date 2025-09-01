@@ -6,13 +6,12 @@ from typing import List
 from dotenv import load_dotenv
 from pydantic import Field
 
-
 # Load environment variables from .env file
 load_dotenv()
 
 
 @dataclass
-class LLMConfig:
+class ModelConfig:
     provider: str = Field(..., description="Provider name, required")
     api_key: str = Field(..., description="API key in .env, required")
     model: str = Field(..., description="Model name, required")
@@ -21,7 +20,7 @@ class LLMConfig:
     max_tokens: int = 4096
     temperature: int = 0
     top_p: float = 1.0
-    
+
 
 class ConfigLoader:
     ENV_PATTERN = re.compile(r"\$\{(\w+)\}")  # Pattern for ${VAR_NAME}
@@ -52,10 +51,7 @@ class ConfigLoader:
         else:
             return self._replace_env_var(obj)
 
-    def load(
-            self,
-            config_yaml_path: str
-    ) -> List[LLMConfig]:
+    def load(self, config_yaml_path: str) -> List[ModelConfig]:
         if not config_yaml_path:
             raise ValueError("[Error] YAML config path cannot be None.")
 
@@ -71,7 +67,7 @@ class ConfigLoader:
 
             # Only load enabled configs
             llm_configs = [
-                LLMConfig(**cfg) for cfg in replaced
+                ModelConfig(**cfg) for cfg in replaced
                 if cfg.get("enabled", True)
             ]
             return llm_configs

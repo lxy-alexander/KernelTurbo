@@ -1,15 +1,15 @@
-from llm_base import BaseLLM
-from llm_config import LLMConfig
-from llm_register import LLMRegistry
+from llm.llm_base import BaseModel
+from llm.llm_config import ModelConfig
+from llm.llm_register import ModelRegistry
 from openai import OpenAI
 from typing import Tuple, Optional
 from utils.status import RequestStatus
 
 
-@LLMRegistry.register(provider="openai")
-class OpenAILLM(BaseLLM):
+@ModelRegistry.register(provider="openai")
+class OpenAILLM(BaseModel):
 
-    def __init__(self, config: LLMConfig):
+    def __init__(self, config: ModelConfig):
         super().__init__(config)
         self.client = OpenAI(api_key=self.api_key)
 
